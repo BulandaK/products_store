@@ -4,6 +4,8 @@ import com.example.products.dto.ProductCommand;
 import com.example.products.dto.ProductDto;
 import com.example.products.dto.ProductPatchCommand;
 import com.example.products.dto.ProductUpdateCommand;
+import com.example.products.exception.ProductAlreadyExistsException;
+import com.example.products.exception.ProductNotFoundException;
 import com.example.products.mapper.ProductMapper;
 import com.example.products.model.Product;
 import com.example.products.repository.ProductRepository;
@@ -24,6 +26,7 @@ public class ProductService {
 
     @Transactional
     public ProductDto add(ProductCommand productCommand) {
+        checkIfExistByNameAndType(productCommand.name(), productCommand.type());
         Product product = productMapper.toEntity(productCommand);
         Product saved = productRepository.save(product);
         return productMapper.toDto(saved);
@@ -37,27 +40,37 @@ public class ProductService {
     @Transactional
     public void delete(Long id) {
         Optional<Product> toRemove = productRepository.findById(id);
-        toRemove.ifPresent(productRepository::delete);
+        toRemove.ifPresentOrElse(
+                productRepository::delete,
+                () -> {
+                    throw new ProductNotFoundException("Product not found");
+                }
+        );
     }
 
     @Transactional
     public ProductDto update(Long id, @Valid ProductUpdateCommand command) {
-        return productRepository.findById(id)
-                .map(product -> {
-                    product.setPrice(command.price());
-                    product.setType(command.type());
-                    product.setName(command.name());
-                    return productMapper.toDto(product);
-                }).orElseThrow();
+        checkIfExistByNameAndType(command.name(),command.type());
+        Product product = productRepository.findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException(
+                                "Product with id %d not found".formatted(id)
+                        ));
+
+        product.setPrice(command.price());
+        product.setType(command.type());
+        product.setName(command.name());
+
+        return productMapper.toDto(product);
     }
 
     public ProductDto patch(Long id, @Valid ProductPatchCommand command) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
-        if(command.name() != null) {
+        if (command.name() != null) {
             product.setName(command.name());
         }
-
         if (command.price() != null) {
             product.setPrice(command.price());
         }
@@ -66,5 +79,14 @@ public class ProductService {
         }
 
         return productMapper.toDto(product);
+    }
+
+    private void checkIfExistByNameAndType(String name, String type) {
+        if (productRepository.existsByNameAndType(
+                name,
+                type
+        )) {
+            throw new ProductAlreadyExistsException("Product with this name and type already exists");
+        }
     }
 }
