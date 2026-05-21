@@ -31,12 +31,10 @@ public class ProductService {
         Product saved = productRepository.save(product);
         return productMapper.toDto(saved);
     }
-
     public Page<ProductDto> getProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
         return products.map(productMapper::toDto);
     }
-
     @Transactional
     public void delete(Long id) {
         Optional<Product> toRemove = productRepository.findById(id);
@@ -47,7 +45,6 @@ public class ProductService {
                 }
         );
     }
-
     @Transactional
     public ProductDto update(Long id, @Valid ProductUpdateCommand command) {
         checkIfExistByNameAndType(command.name(),command.type());
@@ -63,7 +60,7 @@ public class ProductService {
 
         return productMapper.toDto(product);
     }
-
+    @Transactional
     public ProductDto patch(Long id, @Valid ProductPatchCommand command) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
@@ -80,7 +77,6 @@ public class ProductService {
 
         return productMapper.toDto(product);
     }
-
     private void checkIfExistByNameAndType(String name, String type) {
         if (productRepository.existsByNameAndType(
                 name,
