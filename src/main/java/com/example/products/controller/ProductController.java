@@ -40,9 +40,4 @@ public class ProductController {
         productService.delete(id);
     }
 
-
-//
-//    public ProductDto update() {
-//
-//    }
 }
