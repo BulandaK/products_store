@@ -19,14 +19,12 @@ public class ProductConfiguration {
     private Long id;
     private String name;
     private BigDecimal price;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "configuration_products",
-            joinColumns = @JoinColumn(name = "configuration_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> configuredProducts;
+    @JoinColumn(name = "parent_product_id")
+    private Product parentProduct;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "child_product_id")
+    private Product configuredProduct;
 }

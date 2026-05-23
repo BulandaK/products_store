@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: BulandaK
+      changes:
+        - createTable:
+            tableName: products
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: DECIMAL(19, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2
+      author: BulandaK
+      changes:
+        - createTable:
+            tableName: products_configuration
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: DECIMAL(19, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: parent_product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: child_product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: products_configuration
+            baseColumnNames: parent_product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: fk_config_parent_product
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: products_configuration
+            baseColumnNames: child_product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: fk_config_child_product
+            onDelete: RESTRICT

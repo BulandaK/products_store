@@ -21,7 +21,7 @@ public class Product {
     private String name;
     private BigDecimal price;
     private String type;
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parentProduct", fetch = FetchType.LAZY)
     private List<ProductConfiguration> productConfigurations;
 
 }
