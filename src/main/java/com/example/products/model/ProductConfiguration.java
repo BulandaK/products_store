@@ -26,5 +26,5 @@ public class ProductConfiguration {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_product_id")
-    private Product configuredProduct;
+    private Product childProduct;
 }

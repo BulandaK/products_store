@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: BulandaK
+      changes:
+        - renameTable:
+            oldTableName: products_configuration
+            newTableName: product_configurations
