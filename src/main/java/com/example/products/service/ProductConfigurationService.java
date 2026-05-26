@@ -4,7 +4,6 @@ import com.example.products.dto.ProductConfigurationDto;
 import com.example.products.mapper.ProductConfigurationMapper;
 import com.example.products.model.ProductConfiguration;
 import com.example.products.repository.ProductConfigurationRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +18,7 @@ public class ProductConfigurationService {
 
 
     public List<ProductConfigurationDto> getConfigurationsByParentProductId(Long parentId) {
-        List<ProductConfiguration> configurations = productConfigurationRepository.getProductsConfigurationByParentProductId(parentId);
-
+        List<ProductConfiguration> configurations = productConfigurationRepository.getProductConfigurationByParentProductId(parentId);
         return productConfigurationMapper.toDtoList(configurations);
     }
 }

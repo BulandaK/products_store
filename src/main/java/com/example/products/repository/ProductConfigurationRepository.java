@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ProductConfigurationRepository extends JpaRepository<ProductConfiguration,Long> {
 
-    List<ProductConfiguration> getProductsConfigurationByParentProductId(Long parentProductId);
+    List<ProductConfiguration> getProductConfigurationByParentProductId(Long parentProductId);
 }

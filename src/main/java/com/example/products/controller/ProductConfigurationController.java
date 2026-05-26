@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/productsConfiguration")
+@RequestMapping("/api/v1/productConfiguration")
 public class ProductConfigurationController {
     private final ProductConfigurationService productConfigurationService;
 

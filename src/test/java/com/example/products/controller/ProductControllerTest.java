@@ -1,6 +1,5 @@
-package com.example.products;
+package com.example.products.controller;
 
-import com.example.products.controller.ProductController;
 import com.example.products.dto.ProductCommand;
 import com.example.products.dto.ProductDto;
 import com.example.products.dto.ProductPatchCommand;
